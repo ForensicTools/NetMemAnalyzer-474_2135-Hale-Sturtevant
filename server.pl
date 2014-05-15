@@ -3,16 +3,23 @@
 use strict;
 use Tk;
 <<<<<<< HEAD
-
-system "nc -l -p 3000 >> testFile | tee output.log";
-
 <<<<<<< HEAD
-print "Checksum == ";
-system "md5sum memoryImage.dd";
+=======
+>>>>>>> 3084ad445cf165ae4dd79a1652850076ae9429e8
+
+my $imageFile = "image.dd";
+
+system "nc -w60 -l -p 31 >> image.dd &";
 
 my $mw = MainWindow->new;
-$mw->geometry("300x300");
+$mw->geometry("380x300");
 $mw->title("NetMemAnalyzer");
+
+$mw->Label( -text => "Welcome to NetMemAnalyzer \nPlease wait for the image to completly transfer before analyzing!", -foreground=>'blue')
+   ->grid(
+	-row => 1,
+	-column => 1,
+	-columnspan =>2);
 
 $mw->Label( -text => "What would you like to analyze?" )
    ->grid(
@@ -24,16 +31,19 @@ $mw->Button(
      -text => "View Strings",
      -command => sub{
 
-			system ("strings memoryImage.dd | more");
+			system ("strings " . $imageFile . " | more");
 		
 		      })
-
       ->grid(
 	-row => 3,
 	-column => 1,
 	-columnspan => 2);
 
+$mw->Button(
+     -text => "Carve JPG Files",
+     -command => sub{
 
+<<<<<<< HEAD
 MainLoop;
 =======
      print "Checksum == ";
@@ -66,22 +76,38 @@ $mw->Label( -text => "Welcome to NetMemAnalyzer \nPlease wait for the image to c
 $mw->Label( -text => "Options" )
    ->grid(
 	-row => 3,
+=======
+			carveJPG();
+		
+		      })
+      ->grid(
+	-row => 4,
+>>>>>>> 3084ad445cf165ae4dd79a1652850076ae9429e8
 	-column => 1,
-	-columnspan =>2);
-       
+	-columnspan => 2);
+
 $mw->Button(
-     -text => "View Strings",
+     -text => "Carve GIF Files",
      -command => sub{
 
+<<<<<<< HEAD
 		system ("strings " . $imageFile . " | more");
 		
 	})
       ->grid(
 	-row => 4,
+=======
+			carveGIF();
+		
+		      })
+      ->grid(
+	-row => 5,
+>>>>>>> 3084ad445cf165ae4dd79a1652850076ae9429e8
 	-column => 1,
 	-columnspan => 2);
 
 $mw->Button(
+<<<<<<< HEAD
      -text => "Carve JPG Files",
      -command => sub {
 
@@ -90,10 +116,21 @@ $mw->Button(
 	})
       ->grid(
 	-row => 5,
+=======
+     -text => "Carve PNG Files",
+     -command => sub{
+
+			carvePNG();
+		
+		      })
+      ->grid(
+	-row => 6,
+>>>>>>> 3084ad445cf165ae4dd79a1652850076ae9429e8
 	-column => 1,
 	-columnspan => 2);
 
 $mw->Button(
+<<<<<<< HEAD
      -text => "Carve GIF Files",
      -command => sub {
 
@@ -113,11 +150,20 @@ $mw->Button(
 		compareFileList();
 		
 	})
+=======
+     -text => "Exit",
+     -command => sub{
+
+			system ("strings " . $imageFile . " | more");
+		
+		      })
+>>>>>>> 3084ad445cf165ae4dd79a1652850076ae9429e8
       ->grid(
 	-row => 7,
 	-column => 1,
 	-columnspan => 2);
 
+<<<<<<< HEAD
 $mw->Checkbutton(
 	-variable => \$saveLocallyStatus,
 	-text => "Save Carved Files Locally"
@@ -219,13 +265,26 @@ sub carvePNG()
 	my $hex;
 	my $fileBuffer;
 	my $fileChecksum;
+=======
+MainLoop;
+
+sub carveJPG()
+{
+open (IMAGE, "<", $imageFile) or die "Error opening image. \n";
+>>>>>>> 3084ad445cf165ae4dd79a1652850076ae9429e8
 
 		#Read jpg files in 65k blocks
 		while ( (read (IMAGE, $fileBuffer, 65000)) > 0 ) 
 		{
 
+<<<<<<< HEAD
 			# Convert input buffer to hex
 			$hex = unpack('H*', $fileBuffer);
+=======
+my $fileNumber = 0;
+my $hex;
+my $fileBuffer;
+>>>>>>> 3084ad445cf165ae4dd79a1652850076ae9429e8
 
 			# Search for png header and trailer
 			if ($hex =~ m/(89504e470d0a1a0a(?:(?!89504e470d0a1a0a).)*ae426082)/i)
@@ -234,8 +293,13 @@ sub carvePNG()
 				$hex =~ s/^.*(?=89504e470d0a1a0a)//g;
 				$hex =~ s/(0*)$//g;
 
+<<<<<<< HEAD
 				$fileChecksum = sha256_hex(pack('H*', $hex));
 				$fileList{$fileChecksum} = $fileNumber . ".png";		
+=======
+                    # Convert input buffer to hex
+                    $hex = unpack('H*', $fileBuffer);
+>>>>>>> 3084ad445cf165ae4dd79a1652850076ae9429e8
 
 				# If box is checked, save carved png to the local machine
 				if ($saveLocallyStatus == 1)
@@ -245,16 +309,63 @@ sub carvePNG()
 					close (MYFILE);
 				}
 
+<<<<<<< HEAD
 				$fileNumber++;
 			}
+=======
+					print $hex . "\n\n";
+
+                                        # Save carved jpg to a file
+                                        open (MYFILE, '>' . $fileNumber . '.jpeg');
+                                        print (MYFILE pack('H*', $hex));
+                                        close (MYFILE);
+>>>>>>> 3084ad445cf165ae4dd79a1652850076ae9429e8
 
 	
 		}
 
+<<<<<<< HEAD
 	$statusWindow->insert("1.0", "*** PNG CARVE STATUS ***\n" . $fileNumber . " png images were carved from memory image\n\n");
-
+=======
 }
 
+sub carveGIF()
+{
+open (IMAGE, "<", $imageFile) or die "Error opening image. \n";
+
+# Open file in binary mode
+binmode (IMAGE);
+
+my $fileNumber = 0;
+my $hex;
+my $fileBuffer;
+
+#Read jpg files in 65k blocks
+while ( (read (IMAGE, $fileBuffer, 65000)) > 0 ) {
+
+                    # Convert input buffer to hex
+                    $hex = unpack('H*', $fileBuffer);
+
+                    # Search for jpg header and trailer
+                    if ($hex =~ m/(47494638(?:(?!47494638).)*1110003b)/i)
+                    {                 
+                                        # Trim any leading hex and trailing zeros off of the buffer
+					$hex =~ s/^.*(?=47494638)//g;
+                                        $hex =~ s/(0*)$//g;
+
+                                        # Save carved jpg to a file
+                                        open (MYFILE, '>' . $fileNumber . '.gif');
+                                        print (MYFILE pack('H*', $hex));
+                                        close (MYFILE);
+
+                                        $fileNumber++;
+                    }
+>>>>>>> 3084ad445cf165ae4dd79a1652850076ae9429e8
+
+	}  
+}
+
+<<<<<<< HEAD
 sub carveGIF()
 {
 	open (IMAGE, "<", $imageFile) or die "Error opening image. \n";
@@ -320,3 +431,40 @@ sub compareFileList()
 
 }
 >>>>>>> a42f7cee96f92ded567da30c0525679b2e9a83bc
+=======
+sub carvePNG()
+{
+open (IMAGE, "<", $imageFile) or die "Error opening image. \n";
+
+# Open file in binary mode
+binmode (IMAGE);
+
+my $fileNumber = 0;
+my $hex;
+my $fileBuffer;
+
+#Read jpg files in 65k blocks
+while ( (read (IMAGE, $fileBuffer, 65000)) > 0 ) {
+
+                    # Convert input buffer to hex
+                    $hex = unpack('H*', $fileBuffer);
+
+                    # Search for jpg header and trailer
+                    if ($hex =~ m/(89504e470d0a1a0a(?:(?!89504e470d0a1a0a).)*ae426082)/i)
+                    {                 
+                                        # Trim any leading hex and trailing zeros off of the buffer
+					$hex =~ s/^.*(?=89504e470d0a1a0a)//g;
+                                        $hex =~ s/(0*)$//g;
+
+                                        # Save carved jpg to a file
+                                        open (MYFILE, '>' . $fileNumber . '.png');
+                                        print (MYFILE pack('H*', $hex));
+                                        close (MYFILE);
+	
+                                        $fileNumber++;
+                    }
+
+}
+}
+}
+>>>>>>> 3084ad445cf165ae4dd79a1652850076ae9429e8
