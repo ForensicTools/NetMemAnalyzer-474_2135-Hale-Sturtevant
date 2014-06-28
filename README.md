@@ -1,17 +1,51 @@
 NetMemAnalyzer-474_2135-Hale-Sturtevant
 =======================================
 
-A memory analyzer that creates an image of a device’s memory, encrypts and sends to a server for further analysis.
+##Overview:
+NetMemAnalyzer is a client/server memory analyzer that creates an image of a device’s memory and sends it to a server for further analysis.
 
-We will be building a memory analyzer tool which creates an image of a device’s memory, encrypts and sends it to a server (where it will be further analyzed).
+##Main Features:
+ * Search for specific strings
+ * Extraction of JPG, PNG and GIF files from memory image
 
-To verify the integrity of the memory image, we will generate a hash checksum and compare their values on the client as well as the server.
+##Requirements:
+Our application is currently supported on UNIX/Linux Operating Systems:
+ * Kali Linux
+ * Other versions of Linux have not been tested yet, although may still be compatible.
 
-Our server application will consist of a GUI, which will allow the user to view specific items within the memory image (such as common credentials, images, etc.)
+The following extensions are required to use NetMemAnalyzer:
+ * Perl
+ * Ncat
+ * Fmem
 
-For our project, we will be using features from the following tools:
+##Installation and Use:
+Server:
+ - Prior to starting the NetMemAnalyzer Server, ensure that Perl is installed with the perk tk module.
+ - Start the server script
+ - Make note of the listening port for use on your client machine
 
-    Ncat
-    Md5sum
-    Sha256sum
-    Fmem
+   Analyzing Memory Images:
+    - Scan for Strings - this option prompts with a dialog box that allows the investigator to search the memory image for specific string values
+   
+    - Save Images Locally Checkbox - by default, NetMemAnalyzer carves file data from the memory image without saving the located files to the investigators machine. If you would like to save the carved file data to the investigators local machine - check this box
+   
+   
+    - Carve JPG, PNG, GIF - The carve options extracts  file data from the memory image and compares it against a list of known bad hashes. The investigator is alerted when a known bad file is located. 
+
+Client:
+The client was built to have less overhead and to preserve as much memory evidence as possible. 
+ - Prior to starting the NetMemAnalyzer Client. ensure that Perl is installed as well as fmem.
+ - Start the client script and entert the connection information for the server
+
+
+##Known Bugs:
+May not extract partial files from memory, only searches for start and end of file signature. 
+
+##License
+This program and all source code is released under GPLv2. Please see LICENSE included with this distribution for more information.
+
+##Authors
+This application was created as an assignment for our Unix Forensics class at Rochester Institute of Technology. If you have any questions, comments or would like to contribute to this project, feel free to reach out to one of us.
+
+- Dillon Hale - Drh9473@rit.edu - www.dillonhale.com
+- Alicia Sturtevant - Aas5999@rit.edu
